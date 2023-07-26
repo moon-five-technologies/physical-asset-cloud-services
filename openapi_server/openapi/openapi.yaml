@@ -556,7 +556,6 @@ components:
       properties:
         user_uuid:
           type: string
-      title: UserUUID
       type: object
     PhoneNumber:
       example:
@@ -595,9 +594,9 @@ components:
       title: User
     UpdatePaymentAmount:
       example:
-        new_payment_amount: 40.0
+        payment_amount: 40.0
       properties:
-        new_payment_amount:
+        payment_amount:
           format: float
           type: number
       title: UpdatePaymentAmount
@@ -605,7 +604,6 @@ components:
     UpdateUser:
       allOf:
       - $ref: '#/components/schemas/UpdatePaymentAmount'
-      - $ref: '#/components/schemas/UserUUID'
       - $ref: '#/components/schemas/PhoneNumber'
       - $ref: '#/components/schemas/Name'
       title: UpdateUser
@@ -674,22 +672,22 @@ components:
     basicAuth:
       scheme: basic
       type: http
-      x-basicInfoFunc: physical_assets.controllers.security_controller_.basic_auth
+      x-basicInfoFunc: openapi_server.controllers.security_controller_.info_from_basicAuth
     ApiKeyAuth:
       in: header
       name: x-api-key
       type: apiKey
-      x-basicInfoFunc: physical_assets.controllers.security_controller_.token_auth
+      x-basicInfoFunc: openapi_server.controllers.security_controller_.info_from_ApiKeyAuth
       x-apikeyInfoFunc: openapi_server.controllers.security_controller_.info_from_ApiKeyAuth
     DeviceKeyAuth:
       in: header
       name: x-device-key
       type: apiKey
-      x-basicInfoFunc: physical_assets.controllers.security_controller_.device_auth
+      x-basicInfoFunc: openapi_server.controllers.security_controller_.info_from_DeviceKeyAuth
       x-apikeyInfoFunc: openapi_server.controllers.security_controller_.info_from_DeviceKeyAuth
     AppId:
       in: header
       name: x-app-id
       type: apiKey
-      x-basicInfoFunc: physical_assets.controllers.security_controller_.application_id_auth
+      x-basicInfoFunc: openapi_server.controllers.security_controller_.info_from_AppId
       x-apikeyInfoFunc: openapi_server.controllers.security_controller_.info_from_AppId

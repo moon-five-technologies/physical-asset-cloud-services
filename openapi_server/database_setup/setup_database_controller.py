@@ -2,8 +2,7 @@ import logging
 import configs
 from psycopg2.extensions import AsIs
 
-from openapi_server.database import PostgreSQLDatabase
-from openapi_server.secrets import POSTGRESQL_PASSWORD
+from openapi_server.database.database import PostgreSQLDatabase
 
 logger = logging.getLogger(__name__)
 

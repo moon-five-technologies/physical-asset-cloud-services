@@ -65,3 +65,4 @@ def info_from_basicAuth(username, password, required_scopes):
     :rtype: dict | None
     """
     return {'uid': 'user_id'}
+

@@ -1,4 +1,4 @@
-FIREBASE_PRIVATE_KEY_PATH = ""
+FIREBASE_PRIVATE_KEY_PATH = "/usr/src/app/openapi_server/keys/firebase_auth_key.json"
 
 # *************************************************
 # 

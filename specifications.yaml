@@ -132,25 +132,25 @@ components:
     basicAuth:
       type: http
       scheme: basic
-      x-basicInfoFunc: physical_assets.controllers.security_controller_.basic_auth
+      x-basicInfoFunc: openapi_server.controllers.security_controller_.info_from_basicAuth
 
     ApiKeyAuth:
       type: apiKey
       in: header
       name: x-api-key
-      x-basicInfoFunc: physical_assets.controllers.security_controller_.token_auth
+      x-basicInfoFunc: openapi_server.controllers.security_controller_.info_from_ApiKeyAuth
 
     DeviceKeyAuth:
       type: apiKey
       in: header
       name: x-device-key
-      x-basicInfoFunc: physical_assets.controllers.security_controller_.device_auth
+      x-basicInfoFunc: openapi_server.controllers.security_controller_.info_from_DeviceKeyAuth
 
     AppId:
       type: apiKey
       in: header
       name: x-app-id
-      x-basicInfoFunc: physical_assets.controllers.security_controller_.application_id_auth
+      x-basicInfoFunc: openapi_server.controllers.security_controller_.info_from_AppId
 
   parameters:
     id:

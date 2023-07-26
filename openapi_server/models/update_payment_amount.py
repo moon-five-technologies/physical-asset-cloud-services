@@ -15,21 +15,21 @@ class UpdatePaymentAmount(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, new_payment_amount=None):  # noqa: E501
+    def __init__(self, payment_amount=None):  # noqa: E501
         """UpdatePaymentAmount - a model defined in OpenAPI
 
-        :param new_payment_amount: The new_payment_amount of this UpdatePaymentAmount.  # noqa: E501
-        :type new_payment_amount: float
+        :param payment_amount: The payment_amount of this UpdatePaymentAmount.  # noqa: E501
+        :type payment_amount: float
         """
         self.openapi_types = {
-            'new_payment_amount': float
+            'payment_amount': float
         }
 
         self.attribute_map = {
-            'new_payment_amount': 'new_payment_amount'
+            'payment_amount': 'payment_amount'
         }
 
-        self._new_payment_amount = new_payment_amount
+        self._payment_amount = payment_amount
 
     @classmethod
     def from_dict(cls, dikt) -> 'UpdatePaymentAmount':
@@ -43,22 +43,22 @@ class UpdatePaymentAmount(Model):
         return util.deserialize_model(dikt, cls)
 
     @property
-    def new_payment_amount(self):
-        """Gets the new_payment_amount of this UpdatePaymentAmount.
+    def payment_amount(self):
+        """Gets the payment_amount of this UpdatePaymentAmount.
 
 
-        :return: The new_payment_amount of this UpdatePaymentAmount.
+        :return: The payment_amount of this UpdatePaymentAmount.
         :rtype: float
         """
-        return self._new_payment_amount
+        return self._payment_amount
 
-    @new_payment_amount.setter
-    def new_payment_amount(self, new_payment_amount):
-        """Sets the new_payment_amount of this UpdatePaymentAmount.
+    @payment_amount.setter
+    def payment_amount(self, payment_amount):
+        """Sets the payment_amount of this UpdatePaymentAmount.
 
 
-        :param new_payment_amount: The new_payment_amount of this UpdatePaymentAmount.
-        :type new_payment_amount: float
+        :param payment_amount: The payment_amount of this UpdatePaymentAmount.
+        :type payment_amount: float
         """
 
-        self._new_payment_amount = new_payment_amount
+        self._payment_amount = payment_amount

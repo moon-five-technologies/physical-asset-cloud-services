@@ -8,4 +8,19 @@ werkzeug == 0.16.1; python_version=="3.5" or python_version=="3.4"
 swagger-ui-bundle >= 0.0.2
 python_dateutil >= 2.6.0
 setuptools >= 21.0.0
-Flask == 1.1.2
+Flask == 1.1.1
+
+# Requirements changes due to flask iteration 1.1.1
+Jinja2==2.11.1
+markupsafe==2.0.1
+itsdangerous==2.0.1
+werkzeug==2.0.3
+psycopg2-binary==2.9.3
+
+
+# General requirements
+pandas==1.0.1
+SQLAlchemy==1.3.13
+geopy==2.2.0
+pyjwt
+firebase-admin==6.2.0
