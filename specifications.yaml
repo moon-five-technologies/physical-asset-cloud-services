@@ -1,0 +1,435 @@
+openapi: 3.0.0
+
+info:
+  version: 0.0.2
+  title: Moon Five Technologies Physical Asset Information Services
+  description: All things user information, device information, and anything else that is physical.
+  contact:
+    name: API Support
+    email: support@moonfive.tech
+
+servers:
+  - url: http://localhost/api/v1
+    description: Local host
+paths:
+  /user:
+    post:
+      tags:
+        - Users
+      summary: Add new user.
+      security:
+        - AppId: []
+      description: Add a new user to the database. In order to do so, you must have the correct application identifier. All users created though this API will have standard privileges, in order to view more general information, your permission level needs to be elevated to admin.
+      requestBody:
+        description:  Add a new user.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        "201":
+          $ref: "#/components/responses/201GoodPost"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        default:
+          description: Unexpected error.
+    put:
+      tags:
+        - Users
+      summary: Update user account information.
+      description: While not inclusive of all fields stored, this endpoint allows for a user to update their own profile.  In order to update user profiles that are not related to your account, you must be an admin.
+      requestBody:
+        description: Information to be updated.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateUser"
+      responses:
+        "201":
+          $ref: "#/components/responses/201GoodPost"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          description: Could not find user identified.
+        default:
+          description: Unexpected error.
+      x-swagger-router-controller: "mvp_api.web.controllers.user_controller"
+    get:
+      tags:
+        - Users
+      summary: Query User accounts.
+      description: Allows for a user to retrieve their information to be displayed in an application.  Information retrieval is limited to your user's account unless you are an admin.
+      parameters:
+        - $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/UniqueIdentifier"
+        - $ref: "#/components/parameters/firstNameParameter"
+        - $ref: "#/components/parameters/middleNameParameter"
+        - $ref: "#/components/parameters/lastNameParameter"
+        - $ref: "#/components/parameters/countryCodeParameter"
+        - $ref: "#/components/parameters/areaCodeParameter"
+        - $ref: "#/components/parameters/phoneNumberParameter"
+        - $ref: "#/components/parameters/paymentAmountParameter"
+        - $ref: "#/components/parameters/emailParameter"
+        - $ref: "#/components/parameters/isValidParameter"
+        - $ref: "#/components/parameters/conductIsValidParameter"
+        - $ref: "#/components/parameters/validFinancialsParameter"
+        - $ref: "#/components/parameters/limitParameter"
+        - $ref: "#/components/parameters/offsetParameter"
+      responses:
+        "200":
+          description: Successfully queried user accounts.
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        default:
+          description: Unexpected error.
+      x-swagger-router-controller: "mvp_api.web.controllers.user_controller"
+    delete:
+      tags:
+        - Users
+      summary: Delete user account.
+      description: This endpoint will allow for a user to delete their own account. In order to delete an account that is not yours, you must be an admin.
+      responses:
+        "201":
+          $ref: "#/components/responses/201GoodPost"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          description: Could not find user account.
+        default:
+          description: Unexpected error.
+
+  /user/login:
+    get:
+      tags:
+        - Users
+      summary: Retrieve ApiKeyAuth string via basic authentication.
+      description: After you have created an account, you can retrieve an account via 
+      security:
+        - basicAuth: []
+      responses:
+        "200": 
+          $ref: "#/components/responses/200SuccessfulLogin"
+        default:
+          description: Unexpected error.
+  /user/transaction-history:
+    get:
+      tags:
+        - Users
+      summary: Retrieve the balance of the users account.
+      parameters:
+        - $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/userUUIDParameter"
+        - $ref: "#/components/parameters/MostRecentEntry"
+      responses:
+        "200":
+          $ref: "#/components/responses/200SuccessfullyRetrievedTransactionHistory"
+        default:
+          description: Unexpected error.
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      x-basicInfoFunc: physical_assets.controllers.security_controller_.basic_auth
+
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+      x-basicInfoFunc: physical_assets.controllers.security_controller_.token_auth
+
+    DeviceKeyAuth:
+      type: apiKey
+      in: header
+      name: x-device-key
+      x-basicInfoFunc: physical_assets.controllers.security_controller_.device_auth
+
+    AppId:
+      type: apiKey
+      in: header
+      name: x-app-id
+      x-basicInfoFunc: physical_assets.controllers.security_controller_.application_id_auth
+
+  parameters:
+    id:
+      in: query
+      name: id
+      description: Database identifier.
+      required: false
+      schema:
+        type: string
+        example: 1
+    UniqueIdentifier:
+      in: query
+      name: uuid
+      description: A unique identifier for the row.
+      required: false
+      schema:
+        type: string
+        example: "1cfd7646-80e1-43a3-ba9c-f4a2c569c045"
+    MostRecentEntry:
+      in: query
+      name: most_recent_entry
+      description: A boolean that allows the user to only the most recent entry.
+      required: false
+      schema:
+        type: boolean
+        example: false
+    userUUIDParameter:
+      name: user_uuid
+      in: query
+      description: User unique identifier.
+      required: false
+      schema:
+        type: string
+        example: "1cfd7646-80e1-43a3-ba9c-f4a2c569c045"
+    firstNameParameter:
+      in: query
+      name: first_name
+      description: A users first name.
+      required: false
+      schema:
+        type: string
+        example: Robert
+    middleNameParameter:
+      in: query
+      name: middle_name
+      description: A users middle name.
+      required: false
+      schema:
+        type: string
+        example: Jingle
+    lastNameParameter:
+      in: query
+      name: last_name
+      description: A users last name.
+      required: false
+      schema:
+        type: string
+        example: Smith
+    countryCodeParameter:
+      in: query
+      name: country_code
+      description: A phone number's country code.
+      required: false
+      schema:
+        type: integer
+        example: 1
+    areaCodeParameter:
+      in: query
+      name: area_code
+      description: A phone number's area code.
+      required: false
+      schema:
+        type: integer
+        example: 408
+    conductIsValidParameter:
+      in: query
+      name: conduct_is_valid
+      description: Denotes if user has acted poorly while using the charging system.
+      required: false
+      schema:
+        type: boolean
+        example: true 
+    validFinancialsParameter:
+      in: query
+      name: valid_financials
+      description: Denotes if user is in good financial standing.
+      required: false
+      schema:
+        type: boolean
+        example: true 
+    isValidParameter:
+      in: query
+      name: is_valid
+      description: Denotes if user is valid or not.
+      required: false
+      schema:
+        type: boolean
+        example: true 
+    phoneNumberParameter:
+      in: query
+      name: phone_number
+      description: A phone number, not including country code or area code, including seven digits.
+      required: false
+      schema:
+        type: integer
+        example: 3143155
+    emailParameter:
+      in: query
+      name: email
+      description: The email address of a user.
+      required: false
+      schema:
+        type: string
+        example: user@email.com
+    paymentAmountParameter:
+      in: query
+      name: payment_amount
+      description: The amount that the user will be bulked charged during an overdraft event. 
+      required: false
+      schema:
+        type: number
+        format: float
+        example: 20.00
+    offsetParameter:
+      name: offset
+      in: query
+      description: Number of items to skip before returning the results.
+      required: false
+      schema:
+        type: integer
+        format: int32
+        minimum: 0
+        default: 0
+        example: 0
+    limitParameter:
+      name: limit
+      in: query
+      description: Maximum number of items to return.
+      required: false
+      schema:
+        type: integer
+        format: int32
+        minimum: 1
+        maximum: 1000
+        default: 20
+        example: 20
+  schemas:
+    RecordedTime:
+      allOf:
+        - type: object
+          required:
+            - recorded_time
+          properties:
+            recorded_time:
+              type: string
+              format: date-time
+          example:
+            recorded_time: "2022-02-01T01:00:00Z"
+    UserUUID:
+      type: object
+      properties:
+        user_uuid:
+          type: string
+      example:
+        user_uuid: "1cfd7646-80e1-43a3-ba9c-f4a2c569c045"
+    PhoneNumber:
+      type: object
+      properties:
+        country_code:
+          type: integer
+          format: int32
+        area_code:
+          type: integer
+          format: int32
+        phone_number:
+          type: integer
+          format: int32
+      example: 
+        country_code: 1
+        area_code: 408
+        phone_number: 3124511
+    Name:
+      type: object
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+      example:
+        first_name: Robert
+        last_name: Smith
+    User:
+      allOf:
+        - $ref: "#/components/schemas/RecordedTime"
+        - $ref: "#/components/schemas/PhoneNumber"
+        - $ref: "#/components/schemas/Name"
+        - type: object
+          required:
+            - first_name
+            - last_name
+            - email
+            - country_code
+            - area_code
+            - phone_number
+            - firebase_uuid
+          properties:
+            email:
+              type: string
+            firebase_uuid:
+              type: string
+              format: password
+          example:
+            email: user@email.com
+            firebase_uuid: "xzwYpcfh54hE1EoatyD2aaRMrrm1"
+    UpdatePaymentAmount:
+      type: object
+      properties:
+        payment_amount:
+          type: number
+          format: float
+      example:
+        payment_amount: 40.0
+    UpdateUser:
+      allOf:
+        - $ref: "#/components/schemas/UpdatePaymentAmount"
+        - $ref: "#/components/schemas/PhoneNumber"
+        - $ref: "#/components/schemas/Name"
+    Transaction:
+      type: object
+      properties:
+        balance:
+          type: number
+          format: float
+        transaction_cost:
+          type: number
+          format: float
+        transaction_location:
+          type: string
+        name_of_transaction_location:
+          type: string
+        is_refund:
+          type: boolean
+      example:
+        balance: 31.10
+        transaction_cost: 3.12
+        transaction_location: (37.85333252097135, 31.111)
+        name_of_transaction_location: Pizza Hut 
+        is_refund: false
+
+  responses:
+    201GoodPost:
+      description: Successfully posted to API.
+    200SuccessfulLogin:
+      description: Successfully retrieved login token.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              token: 
+                type: string
+            example:
+              token: user_login_token_string
+    200SuccessfullyRetrievedTransactionHistory:
+      description: Successfully retrieved the relevant transaction history."
+      content:
+        application/json:
+          schema:
+            type: array
+            items: 
+              allOf:
+                - $ref: "#/components/schemas/Transaction"
+    UnauthorizedError:
+      description: API key is missing or invalid.
+      headers:
+        WWW_Authenticate:
+          schema:
+            type: string
+
+
+security:
+  - ApiKeyAuth: []
