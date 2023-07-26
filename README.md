@@ -1,6 +1,5 @@
 ## Physical Asset Information Application Interface
-### OpenAPI generated server
-### Moon Five Technologies Inc 
+An OpenAPI generated server 
 
 ## Setup
 1. Retrieve the firebase admin sdk private key, add this file to the `/openapi_server/keys` folder under the name `firebase_auth_key.json`.
